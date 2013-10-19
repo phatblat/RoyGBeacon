@@ -75,9 +75,33 @@
     self.uuidLabel.text = [beacon.proximityUUID UUIDString];
     self.majorLabel.text = [beacon.major stringValue];
     self.minorLabel.text = [beacon.minor stringValue];
-    self.proximityLabel.text = [NSString stringWithFormat:@"%d", beacon.proximity];
+    self.proximityLabel.text = [self stringWithProximity:beacon.proximity];
     self.accuracyLabel.text = [NSString stringWithFormat:@"%f", beacon.accuracy];
     self.rssiLabel.text = [NSString stringWithFormat:@"%ld", (long)beacon.rssi];
+}
+
+- (NSString *)stringWithProximity:(CLProximity)proximity
+{
+    switch (proximity) {
+        case CLProximityUnknown:
+            return @"Unknown";
+            break;
+
+        case CLProximityImmediate:
+            return @"Immediate";
+            break;
+
+        case CLProximityNear:
+            return @"Near";
+            break;
+
+        case CLProximityFar:
+            return @"Far";
+            break;
+
+        default:
+            break;
+    }
 }
 
 #pragma mark - Flipside View Controller
