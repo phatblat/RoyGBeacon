@@ -10,20 +10,74 @@
 
 @interface RGBMainViewController ()
 
+@property (strong, nonatomic) CLLocationManager *locationManager;
+@property (strong, nonatomic) NSMutableArray *rangedRegions;
+@property (strong, nonatomic) NSMutableDictionary *beacons;
+
+@property (weak, nonatomic) IBOutlet UILabel *uuidLabel;
+@property (weak, nonatomic) IBOutlet UILabel *majorLabel;
+@property (weak, nonatomic) IBOutlet UILabel *minorLabel;
+@property (weak, nonatomic) IBOutlet UILabel *proximityLabel;
+@property (weak, nonatomic) IBOutlet UILabel *accuracyLabel;
+@property (weak, nonatomic) IBOutlet UILabel *rssiLabel;
+
 @end
 
 @implementation RGBMainViewController
 
+#pragma mark - UIViewController
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
+
+    // This location manager will be used to notify the user of region state transitions.
+    self.locationManager = [[CLLocationManager alloc] init];
+    self.locationManager.delegate = self;
+
+    // Populate the regions we will range once.
+    self.rangedRegions = [NSMutableArray array];
+
+    NSArray * supportedProximityUUIDs = @[[[NSUUID alloc] initWithUUIDString:@"E2C56DB5-DFFB-48D2-B060-D0F5A71096E0"],
+                                          [[NSUUID alloc] initWithUUIDString:@"5A4BCFCE-174E-4BAC-A814-092E77F6B7E5"],
+                                          [[NSUUID alloc] initWithUUIDString:@"74278BDA-B644-4520-8F0C-720EAF059935"]];
+
+    [supportedProximityUUIDs enumerateObjectsUsingBlock:^(id uuidObj, NSUInteger uuidIdx, BOOL *uuidStop) {
+        NSUUID *uuid = (NSUUID *)uuidObj;
+        CLBeaconRegion *region = [[CLBeaconRegion alloc] initWithProximityUUID:uuid identifier:[uuid UUIDString]];
+        [self.rangedRegions addObject:region];
+    }];
 }
 
-- (void)didReceiveMemoryWarning
+- (void)viewDidAppear:(BOOL)animated
 {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    // Start ranging when the view appears.
+    [self.rangedRegions enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        CLBeaconRegion *region = obj;
+        [self.locationManager startRangingBeaconsInRegion:region];
+    }];
+}
+
+#pragma mark - CLLocationManagerDelegate
+
+- (void)locationManager:(CLLocationManager *)manager didRangeBeacons:(NSArray *)beacons inRegion:(CLBeaconRegion *)region
+{
+    if ([beacons count] > 0) {
+        CLBeacon *nearestBeacon = [beacons firstObject];
+        [self beaconDetected:nearestBeacon];
+    }
+}
+
+#pragma mark - Beacon Handling
+
+- (void)beaconDetected:(CLBeacon *)beacon
+{
+    self.uuidLabel.text = [beacon.proximityUUID UUIDString];
+    self.majorLabel.text = [beacon.major stringValue];
+    self.minorLabel.text = [beacon.minor stringValue];
+    self.proximityLabel.text = [NSString stringWithFormat:@"%d", beacon.proximity];
+    self.accuracyLabel.text = [NSString stringWithFormat:@"%f", beacon.accuracy];
+    self.rssiLabel.text = [NSString stringWithFormat:@"%ld", (long)beacon.rssi];
 }
 
 #pragma mark - Flipside View Controller
@@ -64,5 +118,4 @@
         [self performSegueWithIdentifier:@"showAlternate" sender:sender];
     }
 }
-
 @end

@@ -7,8 +7,9 @@
 //
 
 #import "RGBFlipsideViewController.h"
+#import <CoreLocation/CoreLocation.h>
 
-@interface RGBMainViewController : UIViewController <RGBFlipsideViewControllerDelegate, UIPopoverControllerDelegate>
+@interface RGBMainViewController : UIViewController <RGBFlipsideViewControllerDelegate, UIPopoverControllerDelegate, CLLocationManagerDelegate>
 
 @property (strong, nonatomic) UIPopoverController *flipsidePopoverController;
 
