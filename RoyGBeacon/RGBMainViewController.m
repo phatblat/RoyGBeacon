@@ -78,6 +78,7 @@
     self.proximityLabel.text = [self stringWithProximity:beacon.proximity];
     self.accuracyLabel.text = [NSString stringWithFormat:@"%f", beacon.accuracy];
     self.rssiLabel.text = [NSString stringWithFormat:@"%ld", (long)beacon.rssi];
+    [self setBackgroundColor:beacon.rssi];
 }
 
 - (NSString *)stringWithProximity:(CLProximity)proximity
@@ -101,6 +102,32 @@
 
         default:
             break;
+    }
+}
+
+- (void)setBackgroundColor:(NSInteger)signalStrength
+{
+    if (signalStrength > -20) {
+        // 10-20: red
+        self.view.backgroundColor = [UIColor redColor];
+    } else if (signalStrength > -30) {
+        // 20-30: orange
+        self.view.backgroundColor = [UIColor orangeColor];
+    } else if (signalStrength > -40) {
+        // 30-40: yellow
+        self.view.backgroundColor = [UIColor yellowColor];
+    } else if (signalStrength > -50) {
+        // 40-50: green
+        self.view.backgroundColor = [UIColor greenColor];
+    } else if (signalStrength > -60) {
+        // 50-60: blue
+        self.view.backgroundColor = [UIColor blueColor];
+    } else if (signalStrength > -70) {
+        // 60-70: purple
+        self.view.backgroundColor = [UIColor purpleColor];
+    } else {
+        // 70-90: dark gray
+        self.view.backgroundColor = [UIColor darkGrayColor];
     }
 }
 
