@@ -107,27 +107,20 @@
 
 - (void)setBackgroundColor:(NSInteger)signalStrength
 {
-    if (signalStrength > -20) {
-        // 10-20: red
-        self.view.backgroundColor = [UIColor redColor];
-    } else if (signalStrength > -30) {
-        // 20-30: orange
-        self.view.backgroundColor = [UIColor orangeColor];
-    } else if (signalStrength > -40) {
-        // 30-40: yellow
-        self.view.backgroundColor = [UIColor yellowColor];
-    } else if (signalStrength > -50) {
-        // 40-50: green
-        self.view.backgroundColor = [UIColor greenColor];
-    } else if (signalStrength > -60) {
-        // 50-60: blue
-        self.view.backgroundColor = [UIColor blueColor];
-    } else if (signalStrength > -70) {
-        // 60-70: purple
-        self.view.backgroundColor = [UIColor purpleColor];
-    } else {
-        // 70-90: dark gray
+    if (signalStrength < -90) {
         self.view.backgroundColor = [UIColor darkGrayColor];
+    } else if (signalStrength < -80) {
+        self.view.backgroundColor = [UIColor purpleColor];
+    } else if (signalStrength < -70) {
+        self.view.backgroundColor = [UIColor blueColor];
+    } else if (signalStrength < -60) {
+        self.view.backgroundColor = [UIColor greenColor];
+    } else if (signalStrength < -50) {
+        self.view.backgroundColor = [UIColor yellowColor];
+    } else if (signalStrength < -40) {
+        self.view.backgroundColor = [UIColor orangeColor];
+    } else if (signalStrength < -30) {
+        self.view.backgroundColor = [UIColor redColor];
     }
 }
 
