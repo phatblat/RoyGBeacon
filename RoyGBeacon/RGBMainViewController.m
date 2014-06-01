@@ -84,10 +84,6 @@
 - (NSString *)stringWithProximity:(CLProximity)proximity
 {
     switch (proximity) {
-        case CLProximityUnknown:
-            return @"Unknown";
-            break;
-
         case CLProximityImmediate:
             return @"Immediate";
             break;
@@ -100,7 +96,12 @@
             return @"Far";
             break;
 
+        case CLProximityUnknown:
+            return @"Unknown";
+            break;
+
         default:
+            return nil;
             break;
     }
 }
@@ -162,4 +163,5 @@
         [self performSegueWithIdentifier:@"showAlternate" sender:sender];
     }
 }
+
 @end

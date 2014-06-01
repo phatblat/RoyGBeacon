@@ -117,15 +117,15 @@
 		F8A90FCA18122F6700089775 /* RoyGBeacon */ = {
 			isa = PBXGroup;
 			children = (
+				F8A90FE218122F6700089775 /* Images.xcassets */,
+				F8A90FD918122F6700089775 /* Main_iPad.storyboard */,
+				F8A90FD618122F6700089775 /* Main_iPhone.storyboard */,
 				F8A90FD318122F6700089775 /* RGBAppDelegate.h */,
 				F8A90FD418122F6700089775 /* RGBAppDelegate.m */,
-				F8A90FD618122F6700089775 /* Main_iPhone.storyboard */,
-				F8A90FD918122F6700089775 /* Main_iPad.storyboard */,
-				F8A90FDC18122F6700089775 /* RGBMainViewController.h */,
-				F8A90FDD18122F6700089775 /* RGBMainViewController.m */,
 				F8A90FDF18122F6700089775 /* RGBFlipsideViewController.h */,
 				F8A90FE018122F6700089775 /* RGBFlipsideViewController.m */,
-				F8A90FE218122F6700089775 /* Images.xcassets */,
+				F8A90FDC18122F6700089775 /* RGBMainViewController.h */,
+				F8A90FDD18122F6700089775 /* RGBMainViewController.m */,
 				F8A90FCB18122F6700089775 /* Supporting Files */,
 			);
 			path = RoyGBeacon;
@@ -490,6 +490,7 @@
 				F8A90FFB18122F6700089775 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		F8A90FFC18122F6700089775 /* Build configuration list for PBXNativeTarget "RoyGBeaconTests" */ = {
 			isa = XCConfigurationList;
@@ -498,6 +499,7 @@
 				F8A90FFE18122F6700089775 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
