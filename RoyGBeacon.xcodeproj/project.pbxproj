@@ -16,7 +16,6 @@
 		F8A90FD818122F6700089775 /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F8A90FD618122F6700089775 /* Main_iPhone.storyboard */; };
 		F8A90FDB18122F6700089775 /* Main_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F8A90FD918122F6700089775 /* Main_iPad.storyboard */; };
 		F8A90FDE18122F6700089775 /* RGBMainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F8A90FDD18122F6700089775 /* RGBMainViewController.m */; };
-		F8A90FE118122F6700089775 /* RGBFlipsideViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F8A90FE018122F6700089775 /* RGBFlipsideViewController.m */; };
 		F8A90FE318122F6700089775 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F8A90FE218122F6700089775 /* Images.xcassets */; };
 		F8A90FEA18122F6700089775 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F8A90FE918122F6700089775 /* XCTest.framework */; };
 		F8A90FEB18122F6700089775 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F8A90FC418122F6700089775 /* Foundation.framework */; };
@@ -50,8 +49,6 @@
 		F8A90FDA18122F6700089775 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPad.storyboard; sourceTree = "<group>"; };
 		F8A90FDC18122F6700089775 /* RGBMainViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RGBMainViewController.h; sourceTree = "<group>"; };
 		F8A90FDD18122F6700089775 /* RGBMainViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RGBMainViewController.m; sourceTree = "<group>"; };
-		F8A90FDF18122F6700089775 /* RGBFlipsideViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RGBFlipsideViewController.h; sourceTree = "<group>"; };
-		F8A90FE018122F6700089775 /* RGBFlipsideViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RGBFlipsideViewController.m; sourceTree = "<group>"; };
 		F8A90FE218122F6700089775 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		F8A90FE818122F6700089775 /* RoyGBeaconTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RoyGBeaconTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F8A90FE918122F6700089775 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
@@ -122,8 +119,6 @@
 				F8A90FD618122F6700089775 /* Main_iPhone.storyboard */,
 				F8A90FD318122F6700089775 /* RGBAppDelegate.h */,
 				F8A90FD418122F6700089775 /* RGBAppDelegate.m */,
-				F8A90FDF18122F6700089775 /* RGBFlipsideViewController.h */,
-				F8A90FE018122F6700089775 /* RGBFlipsideViewController.m */,
 				F8A90FDC18122F6700089775 /* RGBMainViewController.h */,
 				F8A90FDD18122F6700089775 /* RGBMainViewController.m */,
 				F8A90FCB18122F6700089775 /* Supporting Files */,
@@ -262,7 +257,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F8A90FE118122F6700089775 /* RGBFlipsideViewController.m in Sources */,
 				F8A90FD518122F6700089775 /* RGBAppDelegate.m in Sources */,
 				F8A90FDE18122F6700089775 /* RGBMainViewController.m in Sources */,
 				F8A90FD118122F6700089775 /* main.m in Sources */,
