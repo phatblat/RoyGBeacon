@@ -11,7 +11,7 @@
 @interface RGBMainViewController ()
 
 @property (strong, nonatomic) CLLocationManager *locationManager;
-@property (strong, nonatomic) NSMutableArray *rangedRegions;
+@property (strong, nonatomic) NSMutableArray *beaconRegions;
 @property (strong, nonatomic) NSMutableDictionary *beacons;
 
 @property (weak, nonatomic) IBOutlet UILabel *uuidLabel;
@@ -36,37 +36,80 @@
     self.locationManager.delegate = self;
 
     // Populate the regions we will range once.
-    self.rangedRegions = [NSMutableArray array];
+    self.beaconRegions = [NSMutableArray array];
 
-    NSArray * supportedProximityUUIDs = @[[[NSUUID alloc] initWithUUIDString:@"E2C56DB5-DFFB-48D2-B060-D0F5A71096E0"],
-                                          [[NSUUID alloc] initWithUUIDString:@"5A4BCFCE-174E-4BAC-A814-092E77F6B7E5"],
-                                          [[NSUUID alloc] initWithUUIDString:@"74278BDA-B644-4520-8F0C-720EAF059935"],
-                                          [[NSUUID alloc] initWithUUIDString:@"7D65B622-4AA8-4560-914C-502BE940BC16"]];
+    NSArray *supportedProximityUUIDs = @[[[NSUUID alloc] initWithUUIDString:@"E2C56DB5-DFFB-48D2-B060-D0F5A71096E0"],
+                                         [[NSUUID alloc] initWithUUIDString:@"5A4BCFCE-174E-4BAC-A814-092E77F6B7E5"],
+                                         [[NSUUID alloc] initWithUUIDString:@"74278BDA-B644-4520-8F0C-720EAF059935"],
+                                         [[NSUUID alloc] initWithUUIDString:@"7D65B622-4AA8-4560-914C-502BE940BC16"]];
 
     [supportedProximityUUIDs enumerateObjectsUsingBlock:^(id uuidObj, NSUInteger uuidIdx, BOOL *uuidStop) {
         NSUUID *uuid = (NSUUID *)uuidObj;
         CLBeaconRegion *region = [[CLBeaconRegion alloc] initWithProximityUUID:uuid identifier:[uuid UUIDString]];
-        [self.rangedRegions addObject:region];
+        [self.beaconRegions addObject:region];
     }];
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     // Start ranging when the view appears.
-    [self.rangedRegions enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+    [self.beaconRegions enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         CLBeaconRegion *region = obj;
-        [self.locationManager startRangingBeaconsInRegion:region];
+        [self.locationManager startMonitoringForRegion:region];
+        [self.locationManager requestStateForRegion:region];
     }];
 }
 
 #pragma mark - CLLocationManagerDelegate
 
+- (void)locationManager:(CLLocationManager *)manager didDetermineState:(CLRegionState)state forRegion:(CLRegion *)region
+{
+    NSLog(@"region: %@, state: %@", region, [self stringWithRegionState:state]);
+
+    switch (state) {
+        case CLRegionStateInside:
+            [self.locationManager startRangingBeaconsInRegion:(CLBeaconRegion *)region];
+            break;
+
+        case CLRegionStateOutside:
+        case CLRegionStateUnknown:
+            [self.locationManager stopRangingBeaconsInRegion:(CLBeaconRegion *)region];
+            break;
+    }
+}
+
+- (void)locationManager:(CLLocationManager *)manager didEnterRegion:(CLRegion *)region
+{
+    NSLog(@"region: %@", region);
+
+    [self.locationManager startRangingBeaconsInRegion:(CLBeaconRegion *)region];
+}
+
+- (void)locationManager:(CLLocationManager *)manager didExitRegion:(CLRegion *)region
+{
+    NSLog(@"region: %@", region);
+
+    [self.locationManager stopRangingBeaconsInRegion:(CLBeaconRegion *)region];
+}
+
 - (void)locationManager:(CLLocationManager *)manager didRangeBeacons:(NSArray *)beacons inRegion:(CLBeaconRegion *)region
 {
+    NSLog(@"region: %@, beacons: %@", region, beacons);
+
     if ([beacons count] > 0) {
         CLBeacon *nearestBeacon = [beacons firstObject];
         [self beaconDetected:nearestBeacon];
     }
+}
+
+- (void)locationManager:(CLLocationManager *)manager didStartMonitoringForRegion:(CLRegion *)region
+{
+    NSLog(@"region: %@", region);
+}
+
+- (void)locationManager:(CLLocationManager *)manager monitoringDidFailForRegion:(CLRegion *)region withError:(NSError *)error
+{
+    NSLog(@"region: %@, error: %@", region, error);
 }
 
 #pragma mark - Beacon Handling
@@ -81,6 +124,27 @@
     self.rssiLabel.text = [NSString stringWithFormat:@"%ld", (long)beacon.rssi];
     [self setBackgroundColor:beacon.rssi];
 }
+
+- (void)setBackgroundColor:(NSInteger)signalStrength
+{
+    if (signalStrength < -90) {
+        self.view.backgroundColor = [UIColor darkGrayColor];
+    } else if (signalStrength < -80) {
+        self.view.backgroundColor = [UIColor purpleColor];
+    } else if (signalStrength < -70) {
+        self.view.backgroundColor = [UIColor blueColor];
+    } else if (signalStrength < -60) {
+        self.view.backgroundColor = [UIColor greenColor];
+    } else if (signalStrength < -50) {
+        self.view.backgroundColor = [UIColor yellowColor];
+    } else if (signalStrength < -40) {
+        self.view.backgroundColor = [UIColor orangeColor];
+    } else if (signalStrength < -30) {
+        self.view.backgroundColor = [UIColor redColor];
+    }
+}
+
+#pragma mark - Enum Helpers
 
 - (NSString *)stringWithProximity:(CLProximity)proximity
 {
@@ -107,22 +171,20 @@
     }
 }
 
-- (void)setBackgroundColor:(NSInteger)signalStrength
+- (NSString *)stringWithRegionState:(CLRegionState)state
 {
-    if (signalStrength < -90) {
-        self.view.backgroundColor = [UIColor darkGrayColor];
-    } else if (signalStrength < -80) {
-        self.view.backgroundColor = [UIColor purpleColor];
-    } else if (signalStrength < -70) {
-        self.view.backgroundColor = [UIColor blueColor];
-    } else if (signalStrength < -60) {
-        self.view.backgroundColor = [UIColor greenColor];
-    } else if (signalStrength < -50) {
-        self.view.backgroundColor = [UIColor yellowColor];
-    } else if (signalStrength < -40) {
-        self.view.backgroundColor = [UIColor orangeColor];
-    } else if (signalStrength < -30) {
-        self.view.backgroundColor = [UIColor redColor];
+    switch (state) {
+        case CLRegionStateInside:
+            return @"CLRegionStateInside";
+            break;
+
+        case CLRegionStateOutside:
+            return @"CLRegionStateOutside";
+            break;
+
+        case CLRegionStateUnknown:
+            return @"CLRegionStateUnknown";
+            break;
     }
 }
 
